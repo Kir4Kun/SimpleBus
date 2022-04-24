@@ -4,8 +4,12 @@ import { getBusById, getBuses, startBus, stopBus, updateBus } from './db'
 const router = express.Router()
 
 router.get('/', async (req, res, next) => {
-    const buses = await getBuses()
-    res.send(buses)
+    try {
+        const buses = await getBuses()
+        res.send(buses)
+    } catch (error) {
+        res.status(404).send(error)
+    }
 })
 
 router.get('/:id', async (req, res, next) => {
