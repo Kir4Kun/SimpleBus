@@ -94,10 +94,12 @@ export async function updateBus({ id, latitude, longitude }: { id: string, latit
     const { data, error } = await supabase
         .from('busDistanceStatus')
         .select(`
-            nextStop: nextStopId(*),
+            id,
+            nextStop: nextStopId(*)
         `)
         .eq('busId', id)
         .single()
+
 
     let distance = calculateDistance({ lat1: latitude, lon1: longitude, lat2: data.nextStop.latitude, lon2: data.nextStop.longitude })
 
@@ -105,6 +107,8 @@ export async function updateBus({ id, latitude, longitude }: { id: string, latit
         const busRoutes = await getRouteByBusId(id)
 
         const nextStop = busRoutes.filter(x => x.stopOrder == data.nextStop.stopOrder + 1).map(x => x.busStop)
+
+        console.log(data.nextStop)
 
         if (nextStop.length == 0) {
             return data;
@@ -126,17 +130,23 @@ export async function updateBus({ id, latitude, longitude }: { id: string, latit
 
     }
 
-    if (error) {
-        throw {
-            code: 500,
-            message: `An error occued ${error?.message}`
-        }
-    }
 
-    await supabase
+    const { data: data1, error: error1 } = await supabase
         .from('busDistanceStatus')
         .update({ distanceToNext: distance })
+        .select(`
+            id,
+            distanceToNext,
+            nextStop: nextStopId(*)
+        `)
         .eq('busId', id)
         .single()
 
+    if (error || error1) {
+        throw {
+            code: 500,
+            message: `An error occued ${error?.message}  ${error1?.message}`
+        }
+    }
+    return data1
 }
