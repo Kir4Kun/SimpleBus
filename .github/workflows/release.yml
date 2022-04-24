@@ -24,6 +24,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: api
-          platforms: linux/arm64/v8,linux/amd64
+          platforms: linux/arm/v7,linux/arm64/v8,linux/amd64
           push: true
           tags: rkbl4ze/apps:sbapi
