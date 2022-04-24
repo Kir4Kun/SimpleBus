@@ -28,7 +28,6 @@ export async function getRouteByBusId(id: string) {
         .from('routes')
         .select(`
             id,
-            bus:busId(*),
             stopOrder,
             busStop:busStopId(*)
         `)
