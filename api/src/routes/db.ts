@@ -66,15 +66,9 @@ export async function searchRoutes(from: string, to: string) {
     busIds = toRoutes?.map(route => route.bus.id) as string[]
 
     const { data: routes } = await supabase
-        .from('routes')
-        .select(`
-            id,
-            bus: buses!inner(*),
-            stopOrder,
-            busStop: busStops(*)
-        `)
-        .in('bus.id', busIds)
-        .order('stopOrder', { ascending: true })
+        .from('buses')
+        .select(`*`)
+        .in('id', busIds)
 
     return routes as Route[]
 }
