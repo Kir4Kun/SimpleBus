@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import '../route_page.dart';
 
 class SearchedRoutes extends StatelessWidget {
+  final int id;
   final String busName;
   final String busNo;
   final String time;
   final String fromTo;
   const SearchedRoutes(
       {Key? key,
+      required this.id,
       this.busName = "",
       this.busNo = "",
       this.time = "",
@@ -20,7 +22,15 @@ class SearchedRoutes extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => RoutePage()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const RoutePage(),
+            settings: RouteSettings(
+              arguments: id,
+            ),
+          ),
+        );
       },
       child: BaseCard(
         height: 100,
@@ -41,7 +51,7 @@ class SearchedRoutes extends StatelessWidget {
                       children: <Widget>[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
+                          children: const <Widget>[
                             Text(
                               'UEC607',
                               style: TextStyle(
@@ -51,16 +61,18 @@ class SearchedRoutes extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              'Digital communication',
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.black),
+                              busName,
+                              style: const TextStyle(
+                                  fontSize: 16, color: Colors.black),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         )
@@ -72,9 +84,9 @@ class SearchedRoutes extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          const Text(
-                            'E-206',
-                            style: TextStyle(
+                          Text(
+                            busNo,
+                            style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black),
