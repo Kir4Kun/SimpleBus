@@ -1,7 +1,6 @@
 // import 'package:app/ui/test/showcase_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:timeline_tile/timeline_tile.dart';
 
 class Example {

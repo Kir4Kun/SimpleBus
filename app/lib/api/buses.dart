@@ -1,4 +1,4 @@
-import 'package:app/api/client.dart';
+import 'client.dart';
 import 'package:dio/dio.dart';
 
 Future<Response> getAllBuses() async {

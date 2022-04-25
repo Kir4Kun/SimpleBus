@@ -1,4 +1,4 @@
-import 'package:app/api/buses.dart';
+import 'api/buses.dart';
 import 'package:flutter/material.dart';
 
 import 'ui/home_page.dart';

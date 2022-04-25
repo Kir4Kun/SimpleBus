@@ -1,8 +1,7 @@
-import 'package:app/ui/widgets/base_card.dart';
+import 'base_card.dart';
 import 'package:flutter/material.dart';
 
 import '../route_page.dart';
-import '../test/showcase_timeline_tile.dart';
 
 class SearchedRoutes extends StatelessWidget {
   final String busName;
