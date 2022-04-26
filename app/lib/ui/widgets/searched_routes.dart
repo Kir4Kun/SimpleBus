@@ -22,14 +22,10 @@ class SearchedRoutes extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
+        Navigator.pushNamed(
           context,
-          MaterialPageRoute(
-            builder: (_) => const RoutePage(),
-            settings: RouteSettings(
-              arguments: id,
-            ),
-          ),
+          '/route',
+          arguments: id,
         );
       },
       child: BaseCard(

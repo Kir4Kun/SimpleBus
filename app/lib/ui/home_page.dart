@@ -2,8 +2,10 @@ import 'package:app/api/busstops.dart';
 import 'package:app/api/routes.dart';
 import 'package:app/domain/bus_model.dart';
 import 'package:app/domain/busstop_model.dart';
+import 'package:app/ui/driver_page.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'widgets/searched_routes.dart';
 
@@ -23,17 +25,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Where is my Bus?'),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_horiz),
-            onPressed: () {},
-          ),
-          const SizedBox(width: 5),
-        ],
-      ),
+      appBar: const MyAppBar(),
       drawer: Drawer(
         backgroundColor: const Color.fromRGBO(232, 234, 246, 1),
         child: Column(
@@ -215,6 +207,49 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Get.to(() => const DriverPage());
+        },
+        label: Text(
+          'Driver Mode',
+          style: Theme.of(context).textTheme.button!.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+      ),
     );
   }
+}
+
+class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const MyAppBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: const Text('Where is my Bus?'),
+      centerTitle: true,
+      actions: [
+        PopupMenuButton(
+          itemBuilder: (_) => [
+            PopupMenuItem(
+              child: const Text("Driver Panel"),
+              value: 1,
+              onTap: () {
+                Get.to(() => const DriverPage());
+              },
+            ),
+            const PopupMenuItem(child: Text("Admin Panel"), value: 2)
+          ],
+        ),
+        const SizedBox(width: 5),
+      ],
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

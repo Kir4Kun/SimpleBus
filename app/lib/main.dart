@@ -1,5 +1,7 @@
-import 'api/buses.dart';
+import 'package:app/ui/driver_page.dart';
+import 'package:app/ui/route_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'ui/home_page.dart';
 
@@ -12,13 +14,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomePage(),
+        '/route': (context) => const RoutePage(),
+        '/driver': (context) => const DriverPage(),
+      },
     );
   }
 }
