@@ -24,6 +24,8 @@ const examples = <Example>[
   Example(name: "name", description: "description"),
 ];
 
+int tech = 3;
+
 class RoutePage extends StatelessWidget {
   const RoutePage({Key? key}) : super(key: key);
 
@@ -103,7 +105,9 @@ class RoutePage extends StatelessWidget {
                                 drawGap: true,
                               ),
                               beforeLineStyle: LineStyle(
-                                color: Colors.white.withOpacity(0.2),
+                                color: index >= tech
+                                    ? Colors.white.withOpacity(0.2)
+                                    : Colors.green.withOpacity(1),
                               ),
                               endChild: GestureDetector(
                                 child: _RowExample(
@@ -151,7 +155,9 @@ class _IndicatorExample extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.fromBorderSide(
           BorderSide(
-            color: Colors.white.withOpacity(0.2),
+            color: int.parse(number) > tech
+                ? Colors.white.withOpacity(0.2)
+                : Colors.green.withOpacity(1),
             width: 4,
           ),
         ),
