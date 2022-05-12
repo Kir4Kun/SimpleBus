@@ -1,5 +1,9 @@
+import 'package:app/ui/bug_page.dart';
 import 'package:app/ui/driver_page.dart';
+import 'package:app/ui/feature_page.dart';
+import 'package:app/ui/rate_page.dart';
 import 'package:app/ui/route_page.dart';
+import 'package:app/ui/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,6 +29,10 @@ class MyApp extends StatelessWidget {
         '/': (context) => const HomePage(),
         '/route': (context) => const RoutePage(),
         '/driver': (context) => const DriverPage(),
+        '/settings': (context) => const SettingsPage(),
+        '/bug': (context) => const BugPage(),
+        '/feature': (context) => const FeaturePage(),
+        '/rate': (context) => const RatePage(),
       },
     );
   }

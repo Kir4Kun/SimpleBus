@@ -19,6 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String? from;
   String? to;
+  bool isLoading = false;
 
   List<BusModel> buses = [];
 
@@ -42,7 +43,7 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       children: [
                         Text(
-                          'Where is my Bus?',
+                          'Simple Bus',
                           style: Theme.of(context)
                               .textTheme
                               .headline5!
@@ -61,17 +62,32 @@ class _HomePageState extends State<HomePage> {
                   ListTile(
                     leading: const Icon(Icons.settings),
                     title: const Text('Settings'),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/settings',
+                      );
+                    },
                   ),
                   ListTile(
                     leading: const Icon(Icons.bug_report),
                     title: const Text('Report a bug'),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/bug',
+                      );
+                    },
                   ),
                   ListTile(
                     leading: const Icon(Icons.star),
                     title: const Text('Rate the app'),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/rate',
+                      );
+                    },
                   ),
                   ListTile(
                     leading: const Icon(Icons.language),
@@ -86,7 +102,12 @@ class _HomePageState extends State<HomePage> {
                   ListTile(
                     leading: const Icon(Icons.help),
                     title: const Text('Suggest a feature'),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/feature',
+                      );
+                    },
                   ),
                   ListTile(
                     leading: const Icon(Icons.whatsapp),
@@ -100,113 +121,123 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       backgroundColor: const Color.fromRGBO(232, 234, 246, 1),
-      body: SingleChildScrollView(
-        child: FutureBuilder(
-          future: getAllBusstops(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: const Center(child: CircularProgressIndicator()),
-              );
-            }
-            if (snapshot.hasData) {
-              final busStops = snapshot.data as List<BusStopModel>;
-              return Padding(
-                padding: const EdgeInsets.all(25),
-                child: Column(
-                  children: <Widget>[
-                    Center(
-                      child: SizedBox(
-                          width: 200,
-                          height: 150,
-                          child: CachedNetworkImage(
-                              imageUrl:
-                                  'http://clipart-library.com/images/pTo5xbAkc.png')),
-                    ),
-                    DropdownButtonFormField(
-                      items: busStops
-                          .map((BusStopModel model) => DropdownMenuItem(
-                                value: model.name,
-                                child: Text(model.name),
-                              ))
-                          .toList(),
-                      onChanged: (newValue) {
-                        from = newValue as String;
-                      },
-                      value: from,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'From',
-                        hintText: 'Enter Start Location',
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    DropdownButtonFormField(
-                      items: busStops
-                          .map((model) => DropdownMenuItem(
-                              value: model.name, child: Text(model.name)))
-                          .toList(),
-                      onChanged: (newValue) {
-                        to = newValue as String;
-                      },
-                      value: to,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'To',
-                        hintText: 'Enter Destination Location',
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50),
-                      ),
-                      onPressed: () {
-                        if (from != null && to != null) {
-                          searchRoutes(from!, to!).then((value) {
-                            setState(() {
-                              buses = value;
-                            });
-                          });
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text('Search', style: TextStyle(fontSize: 20)),
-                          SizedBox(width: 10),
-                          Icon(Icons.arrow_forward_sharp, size: 20)
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    ...buses.map(
-                      (e) => Column(
-                        children: [
-                          SearchedRoutes(
-                            id: e.id,
-                            busName: e.name,
-                            busNo: e.rno,
-                            key: Key(e.id.toString()),
+      body: isLoading
+          ? SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: const Center(child: CircularProgressIndicator()),
+            )
+          : SingleChildScrollView(
+              child: FutureBuilder(
+                future: getAllBusstops(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      child: const Center(child: CircularProgressIndicator()),
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    final busStops = snapshot.data as List<BusStopModel>;
+                    return Padding(
+                      padding: const EdgeInsets.all(25),
+                      child: Column(
+                        children: <Widget>[
+                          Center(
+                            child: SizedBox(
+                                width: 200,
+                                height: 150,
+                                child: CachedNetworkImage(
+                                    imageUrl:
+                                        'http://clipart-library.com/images/pTo5xbAkc.png')),
                           ),
-                          const SizedBox(height: 10)
+                          DropdownButtonFormField(
+                            items: busStops
+                                .map((BusStopModel model) => DropdownMenuItem(
+                                      value: model.name,
+                                      child: Text(model.name),
+                                    ))
+                                .toList(),
+                            onChanged: (newValue) {
+                              from = newValue as String;
+                            },
+                            value: from,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'From',
+                              hintText: 'Enter Start Location',
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          DropdownButtonFormField(
+                            items: busStops
+                                .map((model) => DropdownMenuItem(
+                                    value: model.name, child: Text(model.name)))
+                                .toList(),
+                            onChanged: (newValue) {
+                              to = newValue as String;
+                            },
+                            value: to,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'To',
+                              hintText: 'Enter Destination Location',
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size(double.infinity, 50),
+                            ),
+                            onPressed: () {
+                              if (from != null && to != null) {
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                searchRoutes(from!, to!).then((value) {
+                                  setState(() {
+                                    buses = value;
+                                    isLoading = false;
+                                  });
+                                });
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Text('Search', style: TextStyle(fontSize: 20)),
+                                SizedBox(width: 10),
+                                Icon(Icons.arrow_forward_sharp, size: 20)
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          ...buses.map(
+                            (e) => Column(
+                              children: [
+                                SearchedRoutes(
+                                  id: e.id,
+                                  busName: e.name,
+                                  busNo: e.rno,
+                                  key: Key(e.id.toString()),
+                                ),
+                                const SizedBox(height: 10)
+                              ],
+                            ),
+                          )
                         ],
                       ),
-                    )
-                  ],
-                ),
-              );
-            }
-            return Container();
-          },
-        ),
-      ),
+                    );
+                  }
+                  return Container();
+                },
+              ),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -230,23 +261,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text('Where is my Bus?'),
+      title: const Text('Simple Bus'),
       centerTitle: true,
-      actions: [
-        PopupMenuButton(
-          itemBuilder: (_) => [
-            PopupMenuItem(
-              child: const Text("Driver Panel"),
-              value: 1,
-              onTap: () {
-                Get.to(() => const DriverPage());
-              },
-            ),
-            const PopupMenuItem(child: Text("Admin Panel"), value: 2)
-          ],
-        ),
-        const SizedBox(width: 5),
-      ],
     );
   }
 
